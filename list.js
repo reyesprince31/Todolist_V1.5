@@ -1,4 +1,5 @@
 let itemList = ["Buy Food", "Cook Food"];
+let workList = [];
 
 function toDate() {
   const date = new Date();
@@ -12,10 +13,14 @@ function toDate() {
   return today;
 }
 
-function addItemToList(newListItem) {
+function addItemToList(newListItem, whatTitle) {
   if (newListItem) {
-    itemList.push(newListItem);
+    if (whatTitle === "Work") {
+      workList.push(newListItem);
+    } else {
+      itemList.push(newListItem);
+    }
   }
 }
 
-export { toDate, itemList, addItemToList };
+export { toDate, itemList, workList, addItemToList };

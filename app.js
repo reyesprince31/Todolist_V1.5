@@ -1,5 +1,5 @@
 import express from "express";
-import { toDate, itemList, addItemToList } from "./list.js";
+import { toDate, itemList, workList, addItemToList } from "./list.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,10 +17,29 @@ app.get("/", (req, res) => {
   });
 });
 
+app.get("/work", (req, res) => {
+  const currentWorkList = [...workList];
+  res.render("list", {
+    fromServer: "Work List",
+    newListItems: currentWorkList,
+  });
+});
+
 app.post("/", (req, res) => {
+  const { newItem, newTitle } = req.body;
+  if (newTitle === "Work") {
+    addItemToList(newItem, newTitle);
+    res.redirect("/work");
+  } else {
+    addItemToList(newItem, newTitle);
+    res.redirect("/");
+  }
+});
+
+app.post("/work", (req, res) => {
   const { newItem } = req.body;
-  addItemToList(newItem);
-  res.redirect("/");
+  addItemToList(newItem, "Work");
+  res.redirect("/work");
 });
 
 app.listen(PORT, () => {
