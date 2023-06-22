@@ -1,0 +1,83 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Indie Flower', cursive;
+}
+
+body {
+    background: rgb(63,94,251);
+    background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+    
+}
+
+h1 {
+    color: aliceblue;
+    font-size: 2.5rem;
+    text-align: center;
+}
+p {
+    font-size: 2rem;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.box {
+    background-color: white;
+    min-width: 450px;
+    margin: 10px;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+}
+
+.box:first-child {
+    background-color: purple;
+}
+
+.content {
+    display: flex;
+    gap: 20px;
+    margin: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid gray;
+}
+
+form {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+input:checked+p {
+    text-decoration: line-through;
+    text-decoration-color: blueviolet;
+}
+.input-text {
+    border: 0;
+    border-bottom: 1px solid;
+    width: 95%;
+    font-size: 1.5rem;
+}
+
+button {
+    background-color: purple;
+    color: aliceblue;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: 1px solid purple;
+    font-size: 2rem;
+}
+button:hover {
+    background-color: palevioletred;
+    color: white;
+    box-shadow: 3px 3px 3px 0px rgba(0,0,0,0.75);
+}
+

@@ -1,17 +1,28 @@
 import express from "express";
-import { today } from "./list.js";
+import { toDate, itemList, addItemToList } from "./index.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
-// app.set("view engine", "ejs");
+app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  const dateNow = today();
-  res.render("list", { dateToday: dateNow });
+  const formattedDate = toDate();
+  const currentItemList = [...itemList]; // Create a copy of the itemList
+  res.render("index", {
+    fromServer: formattedDate,
+    newListItems: currentItemList,
+  });
+});
+
+app.post("/", (req, res) => {
+  const { newItem } = req.body;
+  addItemToList(newItem);
+  res.redirect("/");
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running at PORT ${PORT}`);
+  console.log(`Connected to Port ${PORT}`);
 });

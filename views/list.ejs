@@ -1,14 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TodoList</title>
-  </head>
-  <body>
-    <h1>Today is: <%= dateToday %></h1>
-    <ul>
-      <li>hello</li>
-    </ul>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="box"><h1><%= fromServer %></h1></div>
+        <div class="box"> 
+            <% for(let i = 0; i < newListItems.length; i++){ %>
+                <div class="content">
+                    <input type="checkbox">
+                    <p><%= newListItems[i] %></p>
+                </div>
+            <% } %>
+            <form method="post">
+                <input type="text" class="input-text" name="newItem" placeholder="add item" autocomplete="off">
+                <button type="submit">+</button>
+            </form>
+      </div>
+      <footer>prince reyes</footer>
+    </div>
+
+</body>
+
 </html>
