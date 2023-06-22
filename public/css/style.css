@@ -64,6 +64,11 @@ input:checked+p {
     border-bottom: 1px solid;
     width: 95%;
     font-size: 1.5rem;
+    padding-left: 5px;
+}
+.input-text:focus {
+    outline: none;
+    border-bottom: 2px solid blueviolet;
 }
 
 button {

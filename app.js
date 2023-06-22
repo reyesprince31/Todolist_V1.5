@@ -1,5 +1,5 @@
 import express from "express";
-import { toDate, itemList, addItemToList } from "./index.js";
+import { toDate, itemList, addItemToList } from "./list.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,7 +11,7 @@ app.use(express.static("public"));
 app.get("/", (req, res) => {
   const formattedDate = toDate();
   const currentItemList = [...itemList]; // Create a copy of the itemList
-  res.render("index", {
+  res.render("list", {
     fromServer: formattedDate,
     newListItems: currentItemList,
   });
