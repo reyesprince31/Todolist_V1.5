@@ -26,6 +26,10 @@ app.get("/work", (req, res) => {
   });
 });
 
+app.get("/about", (req, res) => {
+  res.render("about");
+});
+
 app.post("/", (req, res) => {
   const { newItem, newTitle } = req.body;
   if (newTitle === "Work") {
