@@ -2,12 +2,13 @@
 
         <div class="box"><h1><%= fromServer %></h1></div>
         <div class="box"> 
-            <% for(let i = 0; i < newListItems.length; i++){ %>
+            <% newListItems.forEach(element => { %>
                 <div class="content">
                     <input type="checkbox">
-                    <p><%= newListItems[i] %></p>
+                    <p><%= element.name %></p>
                 </div>
-            <% } %>
+            <% }); %>
+            
             <form method="post">
                 <input type="text" class="input-text" name="newItem" placeholder="add item" autocomplete="off">
                 <button type="submit" name="newTitle" value=<%= fromServer %>>+</button>

@@ -1,6 +1,7 @@
 import express from "express";
-import toDate from "./date.js";
-import { itemList, workList, addItemToList } from "./list.js";
+import { Item, defaultItems } from "./item-schema.js";
+// import toDate from "./date.js";
+// import { itemList, workList, addItemToList } from "./list.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -10,42 +11,66 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  const formattedDate = toDate();
-  const currentItemList = [...itemList]; // Create a copy of the itemList
-  res.render("list", {
-    fromServer: formattedDate,
-    newListItems: currentItemList,
-  });
-});
+  const finding = Item.find({});
 
-app.get("/work", (req, res) => {
-  const currentWorkList = [...workList];
-  res.render("list", {
-    fromServer: "Work List",
-    newListItems: currentWorkList,
+  finding.then((foundItems) => {
+      if (foundItems.length === 0){
+          Item.insertMany(defaultItems)
+          .then(()=> {
+              console.log('Successfully saved default items');
+          })
+          .catch((err)=> {
+            console.log(err);
+          });
+          res.redirect("/");
+      } else {
+        res.render("list", {
+          fromServer: 'formattedDate',
+          newListItems: foundItems,
+        });
+      }
+    });
   });
-});
-
-app.get("/about", (req, res) => {
-  res.render("about");
-});
 
 app.post("/", (req, res) => {
-  const { newItem, newTitle } = req.body;
-  if (newTitle === "Work") {
-    addItemToList(newItem, newTitle);
-    res.redirect("/work");
-  } else {
-    addItemToList(newItem, newTitle);
-    res.redirect("/");
-  }
+  const { newItem } = req.body;
+
+  const itemName = new Item({
+    name: newItem
+  });
+
+  itemName.save().then(() => {
+    console.log("succesfully added!");
+  });
+  res.redirect("/");
 });
 
-app.post("/work", (req, res) => {
-  const { newItem } = req.body;
-  addItemToList(newItem, "Work");
-  res.redirect("/work");
-});
+// app.get("/", (req, res) => {
+//   const formattedDate = toDate();
+//   const currentItemList = [...itemList]; // Create a copy of the itemList
+//   res.render("list", {
+//     fromServer: formattedDate,
+//     newListItems: currentItemList,
+//   });
+// });
+
+// app.get("/work", (req, res) => {
+//   const currentWorkList = [...workList];
+//   res.render("list", {
+//     fromServer: "Work List",
+//     newListItems: currentWorkList,
+//   });
+// });
+
+// app.get("/about", (req, res) => {
+//   res.render("about");
+// });
+
+// app.post("/work", (req, res) => {
+//   const { newItem } = req.body;
+//   addItemToList(newItem, "Work");
+//   res.redirect("/work");
+// });
 
 app.listen(PORT, () => {
   console.log(`Connected to Port ${PORT}`);
