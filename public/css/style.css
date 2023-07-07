@@ -43,7 +43,8 @@ p {
 
 .content {
     display: flex;
-    gap: 20px;
+    justify-content: space-between;
+    width: 100%;
     margin: 10px;
     padding-bottom: 5px;
     border-bottom: 1px solid gray;
@@ -54,6 +55,12 @@ form {
     justify-content: space-between;
     padding: 10px;
 }
+
+.main-content {
+    display: flex;
+    gap: 10px;
+}
+
 
 input:checked+p {
     text-decoration: line-through;
@@ -71,7 +78,7 @@ input:checked+p {
     border-bottom: 2px solid blueviolet;
 }
 
-button {
+.btn-add {
     background-color: purple;
     color: aliceblue;
     height: 50px;
@@ -80,7 +87,7 @@ button {
     border: 1px solid purple;
     font-size: 2rem;
 }
-button:hover {
+.btn-add:hover {
     background-color: palevioletred;
     color: white;
     box-shadow: 3px 3px 3px 0px rgba(0,0,0,0.75);

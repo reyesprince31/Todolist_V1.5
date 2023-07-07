@@ -39,8 +39,20 @@ app.post("/", (req, res) => {
     name: newItem
   });
 
-  itemName.save().then(() => {
-    console.log("succesfully added!");
+  if (newItem){
+    itemName.save().then(() => {
+      console.log("succesfully added!");
+    });
+  }
+  
+  res.redirect("/");
+});
+
+app.post("/delete", (req, res) => {
+  const { checkBox } = req.body;
+
+  Item.findByIdAndRemove({ _id: checkBox }).then(()=> {
+    console.log("Successfully deleted!");
   });
   res.redirect("/");
 });

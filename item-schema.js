@@ -17,6 +17,7 @@ const eatFood = new Item({
     name: 'Eat Food'
 });
 
+
 const defaultItems = [buyFood, cookFood, eatFood];
 
 export { Item, defaultItems };
