@@ -1,5 +1,5 @@
 import express from "express";
-import { Item, defaultItems } from "./item-schema.js";
+import { Item, List, defaultItems } from "./item-schema.js";
 // import toDate from "./date.js";
 // import { itemList, workList, addItemToList } from "./list.js";
 
@@ -14,44 +14,85 @@ app.get("/", (req, res) => {
   const finding = Item.find({});
 
   finding.then((foundItems) => {
-      if (foundItems.length === 0){
-          Item.insertMany(defaultItems)
-          .then(()=> {
-              console.log('Successfully saved default items');
-          })
-          .catch((err)=> {
-            console.log(err);
-          });
-          res.redirect("/");
-      } else {
-        res.render("list", {
-          fromServer: 'formattedDate',
-          newListItems: foundItems,
+    if (foundItems.length === 0) {
+      Item.insertMany(defaultItems)
+        .then(() => {
+          console.log("Successfully saved default items");
+        })
+        .catch((err) => {
+          console.log(err);
         });
-      }
-    });
+      res.redirect("/");
+    } else {
+      res.render("list", {
+        fromServer: "Today",
+        newListItems: foundItems,
+      });
+    }
   });
+});
+
+app.get("/:customListName", (req, res) => {
+  const { customListName } = req.params;
+
+  const findingList = List.findOne({ name: customListName });
+
+  findingList.then((foundList) => {
+    if (!foundList) {
+      console.log("no match");
+      const list = new List({
+        name: customListName,
+        items: defaultItems,
+      });
+
+      list.save().then(() => {
+        console.log("New Route Added with default items");
+      });
+      res.redirect("/" + customListName);
+    } else {
+      console.log(foundList.name);
+      console.log("Found match");
+      res.render("list", {
+        fromServer: foundList.name,
+        newListItems: foundList.items,
+      });
+    }
+  });
+});
 
 app.post("/", (req, res) => {
-  const { newItem } = req.body;
+  const { newItem, newTitle } = req.body;
 
+  console.log("sending title: " + newTitle);
   const itemName = new Item({
-    name: newItem
+    name: newItem,
   });
 
-  if (newItem){
-    itemName.save().then(() => {
-      console.log("succesfully added!");
-    });
+  if (newTitle === "Today") {
+    if (newItem){
+      itemName.save().then(() => {
+        console.log("succesfully added!");
+      });
+    }
+    res.redirect("/");
+  } else {
+    if (newItem){
+      const findingList = List.findOne({ name: newTitle });
+
+      findingList.then((foundList) => {
+        foundList.items.push(itemName);
+        foundList.save();
+      });
+    }
+    res.redirect("/" + newTitle);
   }
-  
-  res.redirect("/");
+
 });
 
 app.post("/delete", (req, res) => {
   const { checkBox } = req.body;
 
-  Item.findByIdAndRemove({ _id: checkBox }).then(()=> {
+  Item.findByIdAndRemove({ _id: checkBox }).then(() => {
     console.log("Successfully deleted!");
   });
   res.redirect("/");
