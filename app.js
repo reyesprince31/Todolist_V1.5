@@ -1,5 +1,6 @@
 import express from "express";
 import { Item, List, defaultItems } from "./item-schema.js";
+import _ from "lodash";
 // import toDate from "./date.js";
 // import { itemList, workList, addItemToList } from "./list.js";
 
@@ -33,7 +34,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/:customListName", (req, res) => {
-  const { customListName } = req.params;
+  const customListName = _.capitalize(req.params.customListName);
 
   const findingList = List.findOne({ name: customListName });
 
@@ -86,44 +87,24 @@ app.post("/", (req, res) => {
     }
     res.redirect("/" + newTitle);
   }
-
 });
 
 app.post("/delete", (req, res) => {
-  const { checkBox } = req.body;
+  const { checkBox, listTitle } = req.body;
 
-  Item.findByIdAndRemove({ _id: checkBox }).then(() => {
-    console.log("Successfully deleted!");
-  });
-  res.redirect("/");
+  if (listTitle === 'Today'){
+    Item.findByIdAndRemove({ _id: checkBox }).then(() => {
+      console.log("Successfully deleted!");
+    });
+    res.redirect("/");
+  } else {
+    List.findOneAndUpdate({name: listTitle}, {$pull: {items: { _id: checkBox}}})
+    .then(() => {
+      console.log("Found and Deleted");
+    });
+    res.redirect("/" + listTitle);
+  }
 });
-
-// app.get("/", (req, res) => {
-//   const formattedDate = toDate();
-//   const currentItemList = [...itemList]; // Create a copy of the itemList
-//   res.render("list", {
-//     fromServer: formattedDate,
-//     newListItems: currentItemList,
-//   });
-// });
-
-// app.get("/work", (req, res) => {
-//   const currentWorkList = [...workList];
-//   res.render("list", {
-//     fromServer: "Work List",
-//     newListItems: currentWorkList,
-//   });
-// });
-
-// app.get("/about", (req, res) => {
-//   res.render("about");
-// });
-
-// app.post("/work", (req, res) => {
-//   const { newItem } = req.body;
-//   addItemToList(newItem, "Work");
-//   res.redirect("/work");
-// });
 
 app.listen(PORT, () => {
   console.log(`Connected to Port ${PORT}`);
